@@ -41,10 +41,10 @@ public class TableRepositoryInMemory implements TableRepository {
         if (!isInitialized) {
             throw new ApplicationException("Need to initialize with maxTable first by call method initTables(int capacity)");
         }
-        int reservationId = currentReservationId + 1;
-        reservationList.put(reservationId, tableNum);
+        currentReservationId++;
+        reservationList.put(currentReservationId, tableNum);
         numberOfAvailableTable -= tableNum;
-        return ++currentReservationId;
+        return currentReservationId;
     }
 
     public void cancel(int reservationId) {
