@@ -1,11 +1,9 @@
 package me.kopkaj.wuthichai.service;
 
-import me.kopkaj.wuthichai.exception.ReservationException;
 import me.kopkaj.wuthichai.model.Table;
 import me.kopkaj.wuthichai.repository.ReservationRepository;
 import me.kopkaj.wuthichai.repository.TableRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -43,8 +41,10 @@ public class TableServiceSimpleReservationTest {
         List<Table> table2 = new ArrayList<Table>() {{
             add(new Table(0, 4, true));
             add(new Table(1, 4, true));
+            add(new Table(2, 4, true));
         }};
         when(tableRepository.getAvailableTables()).thenReturn(table2);
+        // 2 tables can hold 8 person, so table(2) does not get included
         assertEquals(2, service.findAvailableTablesFor(5).size());
         assertEquals(2, service.findAvailableTablesFor(8).size());
     }

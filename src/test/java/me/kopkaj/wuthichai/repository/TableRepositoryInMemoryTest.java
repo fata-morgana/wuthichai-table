@@ -64,6 +64,20 @@ public class TableRepositoryInMemoryTest {
         assertEquals(2, repository.getAvailableTables().get(2).getTableId());
     }
 
+    @Test
+    public void testGetAvailableTableFor() {
+        List<Table> tablesBefore = repository.getAvailableTables();
+        assertEquals(10, tablesBefore.size());
+        assertEquals(0, tablesBefore.get(0).getTableId());
+        assertEquals(1, tablesBefore.get(1).getTableId());
+
+        repository.reserve(1);
+        List<Table> tablesAfter = repository.getAvailableTables();
+        assertEquals(9, tablesAfter.size());
+        assertEquals(0, tablesAfter.get(0).getTableId());
+        assertEquals(2, tablesAfter.get(1).getTableId());
+    }
+
 
     @Test
     public void testReserveOnUnInitializedRepo() {

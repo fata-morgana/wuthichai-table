@@ -28,6 +28,9 @@ public class TableServiceSimpleReservation extends TableServiceBase {
         int numberOfGuestSoFar = 0;
         List<Table> tablesAvailable = new ArrayList<>();
         for (Table each : getTableRepository().getAvailableTables()) {
+            if (numberOfGuestSoFar >= guestNumber) {
+                break;
+            }
             if (each.isAvailable()) {
                 numberOfGuestSoFar += each.getCapacity();
                 tablesAvailable.add(each);
