@@ -9,9 +9,9 @@ import java.util.List;
 
 public abstract class TableServiceBase implements  TableService {
 
-    private TableRepository tableRepository;
+    private final TableRepository tableRepository;
 
-    private ReservationRepository reservationRepository;
+    private final ReservationRepository reservationRepository;
 
     public TableServiceBase(TableRepository tableRepository, ReservationRepository reservationRepository) {
         this.tableRepository = tableRepository;
@@ -29,7 +29,7 @@ public abstract class TableServiceBase implements  TableService {
     public int makeReservation(int guestNumber) {
         List<Table> tables = findAvailableTablesFor(guestNumber);
         if(tables == null || tables.isEmpty()) {
-            throw new ReservationException("Cannot find tables available for this reservation.");
+            throw new ReservationException("Cannot find tables available for this reservation. Please try again later.");
         }
         int reservationId = reservationRepository.makeReservation(tables);
         tables.forEach(table -> tableRepository.reserve(table.getTableId()));

@@ -1,5 +1,6 @@
 package me.kopkaj.wuthichai.repository;
 
+import me.kopkaj.wuthichai.exception.ReservationException;
 import me.kopkaj.wuthichai.model.Table;
 
 import java.util.HashMap;
@@ -27,6 +28,9 @@ public class ReservationRepositoryInMemory implements ReservationRepository {
 
     @Override
     public List<Table> getReservationTables(int reservationId) {
+        if (!reservations.containsKey(reservationId)) {
+            throw new ReservationException("Cannot find reservationId: " + reservationId);
+        }
         return reservations.get(reservationId);
     }
 
