@@ -62,6 +62,18 @@ public class TableRepositoryInMemoryTest {
         assertEquals(0, repository.getAvailableTables().get(0).getTableId());
         assertEquals(1, repository.getAvailableTables().get(1).getTableId());
         assertEquals(2, repository.getAvailableTables().get(2).getTableId());
+    }
 
+
+    @Test
+    public void testReserveOnUnInitializedRepo() {
+        TableRepositoryInMemory.reset();
+        assertThrows(ApplicationException.class, () -> repository.reserve(1));
+    }
+
+    @Test
+    public void testCancelOnUnInitializedRepo() {
+        TableRepositoryInMemory.reset();
+        assertThrows(ApplicationException.class, () -> repository.cancel(1));
     }
 }

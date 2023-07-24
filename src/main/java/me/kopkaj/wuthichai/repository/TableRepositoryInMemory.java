@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 public class TableRepositoryInMemory implements TableRepository {
     private static Integer TABLE_CAPACITY = 4;
 
-    private boolean isInitialized;
+    private static boolean isInitialized;
 
     private static TableRepositoryInMemory instance;
 
@@ -63,5 +63,6 @@ public class TableRepositoryInMemory implements TableRepository {
 
     protected static synchronized void reset() {
         instance = null;
+        isInitialized = false;
     }
 }
