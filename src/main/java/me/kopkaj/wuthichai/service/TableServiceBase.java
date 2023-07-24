@@ -1,5 +1,6 @@
 package me.kopkaj.wuthichai.service;
 
+import me.kopkaj.wuthichai.exception.ReservationException;
 import me.kopkaj.wuthichai.model.Table;
 import me.kopkaj.wuthichai.repository.ReservationRepository;
 import me.kopkaj.wuthichai.repository.TableRepository;
@@ -14,6 +15,7 @@ public abstract class TableServiceBase implements  TableService {
 
     public TableServiceBase(TableRepository tableRepository, ReservationRepository reservationRepository) {
         this.tableRepository = tableRepository;
+        this.reservationRepository = reservationRepository;
     }
 
     @Override
@@ -26,6 +28,9 @@ public abstract class TableServiceBase implements  TableService {
 
     public int makeReservation(int guestNumber) {
         List<Table> tables = findAvailableTablesFor(guestNumber);
+        if(tables == null || tables.isEmpty()) {
+            throw new ReservationException("Cannot find tables available for this reservation.");
+        }
         int reservationId = reservationRepository.makeReservation(tables);
         tables.forEach(table -> tableRepository.reserve(table.getTableId()));
         return reservationId;
@@ -44,7 +49,7 @@ public abstract class TableServiceBase implements  TableService {
         return tableRepository;
     }
 
-//    protected ReservationRepository getReservationRepository() {
-//        return reservationRepository;
-//    }
+    protected ReservationRepository getReservationRepository() {
+        return reservationRepository;
+    }
 }

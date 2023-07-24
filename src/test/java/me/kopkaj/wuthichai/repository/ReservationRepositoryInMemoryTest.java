@@ -8,7 +8,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ReservationRepositoryTest {
+public class ReservationRepositoryInMemoryTest {
     private ReservationRepository repository = new ReservationRepositoryInMemory();
     private final List<Table> tables = new ArrayList<>() {{
         add(new Table(0, 4, true));

@@ -36,5 +36,4 @@ public class TableServiceSimpleReservation extends TableServiceBase {
         return (numberOfGuestSoFar >= guestNumber) ? tablesAvailable : new ArrayList<>();
     }
 
-
 }
