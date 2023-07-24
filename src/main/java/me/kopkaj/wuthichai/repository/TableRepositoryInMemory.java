@@ -1,25 +1,24 @@
 package me.kopkaj.wuthichai.repository;
 
 import me.kopkaj.wuthichai.exception.ApplicationException;
+import me.kopkaj.wuthichai.model.Table;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.IntStream;
 
 public class TableRepositoryInMemory implements TableRepository {
+    private static Integer TABLE_CAPACITY = 4;
 
     private boolean isInitialized;
 
     private static TableRepositoryInMemory instance;
 
-    private int currentReservationId;
+    private int numberOfAvailableTables;
 
-    private int numberOfAvailableTable;
+    private List<Table> tables;
 
-    private final Map<Integer, Integer> reservationList;
     private TableRepositoryInMemory() {
-        currentReservationId = 0;
-        numberOfAvailableTable = 0;
-        reservationList = new HashMap<>();
+        numberOfAvailableTables = 0;
     }
 
     public static synchronized TableRepositoryInMemory getInstance() {
@@ -29,35 +28,37 @@ public class TableRepositoryInMemory implements TableRepository {
         return instance;
     }
 
-    public void initTables(int capacity) {
+    public void initTables(List<Table> tables) {
         if (isInitialized) {
             throw new ApplicationException("This method can be called only once.");
         }
-        numberOfAvailableTable = capacity;
         isInitialized = true;
+        this.tables = tables;
+        numberOfAvailableTables = tables.size();
     }
 
-    public int reserve(int tableNum) {
+    public void reserve(int tableId) {
         if (!isInitialized) {
             throw new ApplicationException("Need to initialize with maxTable first by call method initTables(int capacity)");
         }
-        currentReservationId++;
-        reservationList.put(currentReservationId, tableNum);
-        numberOfAvailableTable -= tableNum;
-        return currentReservationId;
+        numberOfAvailableTables--;
+        tables.get(tableId).setAvailable(false);
     }
 
-    public void cancel(int reservationId) {
+    public void cancel(int tableId) {
         if (!isInitialized) {
             throw new ApplicationException("Need to initialize with maxTable first by call method initTables(int capacity)");
         }
-        int tableNum = reservationList.get(reservationId);
-        numberOfAvailableTable += tableNum;
-        reservationList.remove(reservationId);
+        numberOfAvailableTables++;
+        tables.get(tableId).setAvailable(true);
     }
 
-    public int numberOfAvailableTable() {
-        return numberOfAvailableTable;
+    public int numberOfAvailableTables() {
+        return numberOfAvailableTables;
+    }
+
+    public List<Table> getAvailableTables() {
+        return tables.stream().filter(t -> t.isAvailable()).toList();
     }
 
     protected static synchronized void reset() {
