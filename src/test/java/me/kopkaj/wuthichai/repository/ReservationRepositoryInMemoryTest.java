@@ -1,5 +1,6 @@
 package me.kopkaj.wuthichai.repository;
 
+import me.kopkaj.wuthichai.exception.ReservationException;
 import me.kopkaj.wuthichai.model.Table;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ReservationRepositoryInMemoryTest {
-    private ReservationRepository repository = new ReservationRepositoryInMemory();
+    private ReservationRepository repository = ReservationRepositoryInMemory.getInstance();
     private final List<Table> tables = new ArrayList<>() {{
         add(new Table(0, 4, true));
         add(new Table(1, 4, true));
@@ -19,6 +20,8 @@ public class ReservationRepositoryInMemoryTest {
 
     @Test
     public void testAll() {
+        ReservationRepositoryInMemory.reset();
+        repository.initReservation();
         int reservationId1 = repository.makeReservation(new ArrayList<>() {{
             add(new Table(0, 4, true));
         }});
@@ -34,7 +37,6 @@ public class ReservationRepositoryInMemoryTest {
         assertEquals(2, tables2.get(1).getTableId());
 
         repository.cancelReservation(reservationId2);
-        List<Table> tables3 = repository.getReservationTables(reservationId2);
-        assertNull(tables3);
+        assertThrows(ReservationException.class, () -> repository.getReservationTables(reservationId2));
     }
 }

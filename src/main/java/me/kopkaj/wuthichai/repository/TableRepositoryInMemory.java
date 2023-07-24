@@ -54,10 +54,16 @@ public class TableRepositoryInMemory implements TableRepository {
     }
 
     public int numberOfAvailableTables() {
+        if (!isInitialized) {
+            throw new ApplicationException("Need to initialize with maxTable first by call method initTables(int capacity)");
+        }
         return numberOfAvailableTables;
     }
 
     public List<Table> getAvailableTables() {
+        if (!isInitialized) {
+            throw new ApplicationException("Need to initialize with maxTable first by call method initTables(int capacity)");
+        }
         return tables.stream().filter(t -> t.isAvailable()).toList();
     }
 

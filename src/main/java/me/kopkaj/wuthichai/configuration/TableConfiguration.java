@@ -20,7 +20,7 @@ public class TableConfiguration {
 
     @Bean
     public ReservationRepository reservationRepository() {
-        return new ReservationRepositoryInMemory();
+        return ReservationRepositoryInMemory.getInstance();
     }
 
     @Bean
