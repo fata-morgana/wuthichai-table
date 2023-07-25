@@ -55,6 +55,3 @@ If you call this API before intialize the tables, the API will return error mess
 ## License
 [MIT](https://choosealicense.com/licenses/mit/) license.
 See `License.txt`
-
-
-
