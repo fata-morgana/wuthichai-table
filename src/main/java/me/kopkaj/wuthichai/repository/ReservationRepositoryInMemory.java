@@ -34,13 +34,15 @@ public class ReservationRepositoryInMemory implements ReservationRepository {
     }
 
     private ReservationRepositoryInMemory() {
-        isInitialized = true;
         currentReservationId = new AtomicInteger(0);
         reservations = new HashMap<>();
     }
 
     @Override
     public int makeReservation(List<Table> tables) {
+        if (!isInitialized) {
+            throw new ApplicationException("Need to initialize first by call method initReservation()");
+        }
         int reservationId = currentReservationId.incrementAndGet();
         reservations.put(reservationId, tables);
         return reservationId;
@@ -49,7 +51,7 @@ public class ReservationRepositoryInMemory implements ReservationRepository {
     @Override
     public List<Table> getReservationTables(int reservationId) {
         if (!isInitialized) {
-            throw new ApplicationException("Need to initialize with maxTable first by call method initTables(int capacity)");
+            throw new ApplicationException("Need to initialize first by call method initReservation()");
         }
         if (!reservations.containsKey(reservationId)) {
             throw new ReservationException("Cannot find reservationId: " + reservationId);
@@ -59,6 +61,9 @@ public class ReservationRepositoryInMemory implements ReservationRepository {
 
     @Override
     public void cancelReservation(int reservationId) {
+        if (!isInitialized) {
+            throw new ApplicationException("Need to initialize first by call method initReservation()");
+        }
         reservations.remove(reservationId);
     }
 

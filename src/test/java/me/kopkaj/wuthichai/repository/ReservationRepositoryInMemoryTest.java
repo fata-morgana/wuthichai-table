@@ -1,5 +1,6 @@
 package me.kopkaj.wuthichai.repository;
 
+import me.kopkaj.wuthichai.exception.ApplicationException;
 import me.kopkaj.wuthichai.exception.ReservationException;
 import me.kopkaj.wuthichai.model.Table;
 import org.junit.jupiter.api.Test;
@@ -21,6 +22,9 @@ public class ReservationRepositoryInMemoryTest {
     @Test
     public void testAll() {
         ReservationRepositoryInMemory.reset();
+        assertThrows(ApplicationException.class, () -> repository.makeReservation(new ArrayList<>()));
+        assertThrows(ApplicationException.class, () -> repository.getReservationTables(1));
+        assertThrows(ApplicationException.class, () -> repository.cancelReservation(1));
         repository.initReservation();
         int reservationId1 = repository.makeReservation(new ArrayList<>() {{
             add(new Table(0, 4, true));

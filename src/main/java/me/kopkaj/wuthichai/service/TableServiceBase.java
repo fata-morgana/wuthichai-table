@@ -22,6 +22,7 @@ public abstract class TableServiceBase implements  TableService {
     public void initializeTables(int capacity) {
         List<Table> tables = prepareTablesToInitialize(capacity);
         tableRepository.initTables(tables);
+        reservationRepository.initReservation();
     }
 
     protected abstract List<Table> prepareTablesToInitialize(int capacity);
